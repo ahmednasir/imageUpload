@@ -15,8 +15,8 @@ def format_image(image, path1, path2):
     height_2 = (720 / min_dimension)* crop_dim
 
     image.thumbnail((width, height_1), Image.ANTIALIAS)
-    image.save(path2, "JPEG")
+    image.save(path2)
     image.thumbnail((width, height_2), Image.ANTIALIAS)
-    image.save(path1, "JPEG")
+    image.save(path1)
     return True
 

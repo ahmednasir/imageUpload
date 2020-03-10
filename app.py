@@ -7,9 +7,9 @@ import  datetime as dt
 import pymongo
 from flask_cors import CORS
 
-client = pymongo.MongoClient("mongodb+srv://nasir:Q7N39tZUwSPJjAX@cluster0-zakdw.mongodb.net/test?retryWrites=true&w=majority")
-db = client["Image"]
-col = db["ImageMetaData"]
+# client = pymongo.MongoClient("mongodb+srv://nasir:Q7N39tZUwSPJjAX@cluster0-zakdw.mongodb.net/test?retryWrites=true&w=majority")
+# db = client["Image"]
+# col = db["ImageMetaDataV2"]
 
 STORAGE_PATH = "/Users/nasirahmed/project/typito/uploads/"
 IP_ADDRESS = "http://localhost:3000/"
@@ -45,21 +45,21 @@ def upload():
 
             image_status = image_util.format_image(image, f_name2, f_name3)
             if not image_status:
-                continue
+                l =0/0
             obj = {
                 "name": file.filename,
                 "file1": f_name.replace(STORAGE_PATH,'uploads/'),
                 "file2": f_name2.replace(STORAGE_PATH,'uploads/'),
                 "file3": f_name3.replace(STORAGE_PATH,'uploads/'),
-                "timestamp": dt.datetime.now()
+                "timestamp": int(dt.datetime.now().timestamp())
             }
-            col.insert_one(obj)
+            # col.insert_one(obj)
             obj1 = {
                 "name": file.filename,
                 "file1": f_name.replace(STORAGE_PATH,IP_ADDRESS),
                 "file2": f_name2.replace(STORAGE_PATH,IP_ADDRESS),
                 "file3": f_name3.replace(STORAGE_PATH,IP_ADDRESS),
-                "timestamp": dt.datetime.now()
+                "timestamp": int(dt.datetime.now().timestamp())
             }
 
             image_arr.append(obj1)
@@ -74,13 +74,25 @@ def upload():
         )
         return response
     except Exception as ex:
-        print(ex)
-        return app.response_class(
-            response=json.dumps({}),
-            status=200,
-            mimetype='application/json'
-        )
-
+        ex = ex.args[0]
+        if ex.find('division by zero') != -1:
+            return app.response_class(
+                response=json.dumps({}),
+                status=400,
+                mimetype='application/json'
+            )
+        elif ex.find('cannot identify image file') != -1:
+            return app.response_class(
+                response=json.dumps({}),
+                status=401,
+                mimetype='application/json'
+            )
+        else:
+            return app.response_class(
+                response=json.dumps({}),
+                status=500,
+                mimetype='application/json'
+            )
 
 
 
