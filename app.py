@@ -6,15 +6,16 @@ import uuid
 import  datetime as dt
 import pymongo
 from flask_cors import CORS
-
-# client = pymongo.MongoClient("mongodb+srv://nasir:Q7N39tZUwSPJjAX@cluster0-zakdw.mongodb.net/test?retryWrites=true&w=majority")
-# db = client["Image"]
-# col = db["ImageMetaDataV2"]
+#
+client = pymongo.MongoClient("mongodb+srv://nasir:Q7N39tZUwSPJjAX@cluster0-zakdw.mongodb.net/test?retryWrites=true&w=majority")
+db = client["Image"]
+col = db["ImageMetaDataV2"]
 
 STORAGE_PATH = "/Users/nasirahmed/project/typito/uploads/"
 IP_ADDRESS = "http://localhost:3000/"
 app = Flask(__name__)
 cors = CORS(app)
+print(dt.datetime.now().isoformat())
 
 @app.route('/')
 def hello_world():
@@ -31,10 +32,12 @@ def upload():
 
         image_arr = []
         for file in files:
-            f_name = STORAGE_PATH + (str(uuid.uuid4().hex)) + file.filename
+            uid = (str(uuid.uuid4().hex))
+            time = dt.datetime.now().isoformat().split(".")[0]
+            f_name = STORAGE_PATH + uid +"___date"+time+"__name"+ file.filename
 
-            f_name2 = STORAGE_PATH+"240/" + (str(uuid.uuid4().hex)) + file.filename
-            f_name3 = STORAGE_PATH+"720/" + (str(uuid.uuid4().hex)) + file.filename
+            f_name2 = STORAGE_PATH+"240/" + uid +"___date"+time+"__name"+ file.filename
+            f_name3 = STORAGE_PATH+"720/" + uid+"___date"+time+"__name"+ file.filename
 
             # file_path = root_dir + f_name
             # path2 = root_dir + f_name2
@@ -51,15 +54,17 @@ def upload():
                 "file1": f_name.replace(STORAGE_PATH,'uploads/'),
                 "file2": f_name2.replace(STORAGE_PATH,'uploads/'),
                 "file3": f_name3.replace(STORAGE_PATH,'uploads/'),
-                "timestamp": int(dt.datetime.now().timestamp())
+                "timestamp": dt.datetime.now().isoformat(),
+                "date": dt.datetime.now()
             }
-            # col.insert_one(obj)
+            col.insert_one(obj)
             obj1 = {
                 "name": file.filename,
                 "file1": f_name.replace(STORAGE_PATH,IP_ADDRESS),
                 "file2": f_name2.replace(STORAGE_PATH,IP_ADDRESS),
                 "file3": f_name3.replace(STORAGE_PATH,IP_ADDRESS),
-                "timestamp": int(dt.datetime.now().timestamp())
+                "timestamp": dt.datetime.now().isoformat(),
+                "date": dt.datetime.now()
             }
 
             image_arr.append(obj1)
