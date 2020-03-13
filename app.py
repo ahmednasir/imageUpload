@@ -9,10 +9,10 @@ from flask_cors import CORS
 #
 client = pymongo.MongoClient("mongodb+srv://nasir:Q7N39tZUwSPJjAX@cluster0-zakdw.mongodb.net/test?retryWrites=true&w=majority")
 db = client["Image"]
-col = db["ImageMetaDataV2"]
+col = db["ImageMetaData"]
 
-STORAGE_PATH = "/Users/nasirahmed/project/typito/uploads/"
-IP_ADDRESS = "http://localhost:3000/"
+STORAGE_PATH = "/home/ubuntu/typito/uploads/"
+IP_ADDRESS = "http://13.233.254.7:3000/"
 app = Flask(__name__)
 cors = CORS(app)
 print(dt.datetime.now().isoformat())
