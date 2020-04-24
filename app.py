@@ -7,7 +7,7 @@ import  datetime as dt
 import pymongo
 from flask_cors import CORS
 #
-client = pymongo.MongoClient("mongodb+srv://nasir:Q7N39tZUwSPJjAX@cluster0-zakdw.mongodb.net/test?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://<username>:<password>@cluster0-zakdw.mongodb.net/test?retryWrites=true&w=majority")
 db = client["Image"]
 col = db["ImageMetaData"]
 
